@@ -1,6 +1,6 @@
 <?php
 
-
+$sql = "SELECT * FROM 'corsi';";
 
 
 ?>
