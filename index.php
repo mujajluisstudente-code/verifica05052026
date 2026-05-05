@@ -32,26 +32,53 @@ if(isset($_POST['cambia_corso'])) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="it">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewpoort" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    
+    <title>Gestione Palestra</title>
+
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1></h1>
-            <p>Endpoint: <span class="endpoint-badge">/api/users</span></p>
-        </header>
- <div class="panel">
-            <h2> </h2>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label></label>
-                    <select id="method">
-                        <option value="GET"></option>
-
-                    </select>
-                </div>
+    <div class="menu">
+        <strong><?php echo $_SESSION['cognome']; ?></strong>
+        <a href="?sezione=nuova_iscrizione">Nuova Iscrizione</a>
+        <a href="?sezione=corsi_popolari">Corsi con piu di 5 iscritti</a>
+        <a href="?sezione=cambia_corso">Cambia Corso Iscritti</a>
+        <a href="?sezione=report">Report Completo</a>
+    </div>
+    
+    <?php if($messaggio): ?>
+        <div class="messaggio"><?php echo $messaggio; ?></div>
+    <?php endif; ?>
+    
+    <?php
+    $sezione = isset($_GET['sezione']) ? $_GET['sezione'] : 'nuova_iscrizione';
+    
+    if($sezione == 'nuova_iscrizione'):
+    ?>
+     <div class="sezione">
+        <h2>Nuova iscrizione ad un corso</h2>
+        <form method="POST">
+            <label>Scegli iscritto:</label>
+            <select name="id_membro" required>
+                <option value="">Seleziona iscritto</option>
+                <?php
+                $sql = "SELECT id_membro, nome, cognome FROM Membri ORDER BY cognome, nome";
+                $stmt = $pdo->query($sql);
+                }
+                ?>
+            </select>
+            
+        <label>Scegli Corso:</label>
+            <select name="id_corso" required>
+                <option value="">Seleziona corso</option>
+                <?php
+                $sql = "SELECT c.id_corso, c.nome_corso, i.nome, i.cognome 
+                        FROM Corsi c 
+                        JOIN Istruttori i ON c.id_istruttore = i.id_istruttore 
+                        ORDER BY c.nome_corso";
+                $stmt = $pdo->query($sql);
+                while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    echo "<option value='{$row['id_corso']}'>{$row['nome_corso']} (Istruttore: {$row['nome']} {$row['cognome']})</option>";
+                }
+                ?>
+            </select>
