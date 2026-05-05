@@ -1,3 +1,36 @@
+<?php
+require_once 'config.php';
+checkLogin();
+
+$messaggio = '';
+
+if(isset($_POST['aggiungi_iscrizione'])) {
+    $id_corso = $_POST['id_corso'];
+    $id_membro = $_POST['id_membro'];
+    $data_iscrizione = date('Y-m-d');
+    
+    $sql = "INSERT INTO Iscrizioni_Corsi (id_corso, id_membro, data_iscrizione) VALUES (?, ?, ?)";
+    $stmt = $pdo->prepare($sql);
+    if($stmt->execute([$id_corso, $id_membro, $data_iscrizione])) {
+        $messaggio = "Iscrizione aggiunta";
+    } else {
+        $messaggio = "Errore";
+    }
+}
+
+if(isset($_POST['cambia_corso'])) {
+    $id_iscrizione = $_POST['id_iscrizione'];
+    $nuovo_corso = $_POST['nuovo_corso'];
+    
+    $sql = "UPDATE Iscrizioni_Corsi SET id_corso = ? WHERE id_iscrizione = ?";
+    $stmt = $pdo->prepare($sql);
+    if($stmt->execute([$nuovo_corso, $id_iscrizione])) {
+        $messaggio = "Corso cambiato";
+    } else {
+        $messaggio = "Errore";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="it">
 <head>
