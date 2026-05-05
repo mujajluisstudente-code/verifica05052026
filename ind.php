@@ -11,7 +11,7 @@ $sql = "SELECT * FROM 'corsi';";
 
 $testFile = __DIR__ . '';
 $writeTest = @file_put_contents($testFile, 'Test write at ' . date('Y-m-d H:i:s'));
-if ($writeTest !== false) {
+if ($writeTest != false) {
     echo '<p class="success"></p>';
     @unlink($testFile); 
 } else {
